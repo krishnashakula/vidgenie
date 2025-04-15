@@ -6,10 +6,17 @@ import { ArrowLeft, Construction } from "lucide-react";
 import { useVideoCreation } from "@/context/VideoCreationContext";
 
 const VisualsStep: React.FC = () => {
-  const { setCurrentStep } = useVideoCreation();
+  const { setCurrentStep, updateProgress } = useVideoCreation();
 
   const handleGoBack = () => {
     setCurrentStep("audio");
+  };
+
+  const handleContinue = () => {
+    // Mark this step as completed
+    updateProgress("visuals", true);
+    // Move to the next step
+    setCurrentStep("assembly");
   };
 
   return (
@@ -35,7 +42,7 @@ const VisualsStep: React.FC = () => {
           </Button>
           
           <Button 
-            disabled
+            onClick={handleContinue}
           >
             Continue to Assembly
           </Button>
