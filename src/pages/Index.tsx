@@ -1,11 +1,42 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React from "react";
+import { useVideoCreation } from "@/context/VideoCreationContext";
+import VideoCreationHeader from "@/components/video/VideoCreationHeader";
+import TopicStep from "@/components/video/TopicStep";
+import ScriptStep from "@/components/video/ScriptStep";
+import AudioStep from "@/components/video/AudioStep";
 
 const Index = () => {
+  const { currentStep, setCurrentStep, progress } = useVideoCreation();
+
+  const renderCurrentStep = () => {
+    switch (currentStep) {
+      case "topic":
+        return <TopicStep />;
+      case "script":
+        return <ScriptStep />;
+      case "audio":
+        return <AudioStep />;
+      case "visuals":
+        return <VisualsStep />;
+      case "assembly":
+        return <AssemblyStep />;
+      case "rendering":
+        return <RenderingStep />;
+      default:
+        return <TopicStep />;
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto py-8 px-4">
+        <VideoCreationHeader 
+          currentStep={currentStep}
+          setStep={setCurrentStep}
+          progress={progress}
+        />
+        {renderCurrentStep()}
       </div>
     </div>
   );
