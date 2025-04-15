@@ -5,6 +5,9 @@ import VideoCreationHeader from "@/components/video/VideoCreationHeader";
 import TopicStep from "@/components/video/TopicStep";
 import ScriptStep from "@/components/video/ScriptStep";
 import AudioStep from "@/components/video/AudioStep";
+import VisualsStep from "@/components/video/VisualsStep";
+import AssemblyStep from "@/components/video/AssemblyStep";
+import RenderingStep from "@/components/video/RenderingStep";
 
 const Index = () => {
   const { currentStep, setCurrentStep, progress } = useVideoCreation();
