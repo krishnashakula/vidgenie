@@ -8,6 +8,7 @@ import AudioStep from "@/components/video/AudioStep";
 import VisualsStep from "@/components/video/VisualsStep";
 import AssemblyStep from "@/components/video/AssemblyStep";
 import RenderingStep from "@/components/video/RenderingStep";
+import Header from "@/components/layout/Header";
 
 const Index = () => {
   const { currentStep, setCurrentStep, progress } = useVideoCreation();
@@ -32,14 +33,17 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto py-8 px-4">
-        <VideoCreationHeader 
-          currentStep={currentStep}
-          setStep={setCurrentStep}
-          progress={progress}
-        />
-        {renderCurrentStep()}
+    <div className="min-h-screen bg-background flex flex-col">
+      <Header />
+      <div className="flex-1">
+        <div className="container mx-auto py-8 px-4">
+          <VideoCreationHeader 
+            currentStep={currentStep}
+            setStep={setCurrentStep}
+            progress={progress}
+          />
+          {renderCurrentStep()}
+        </div>
       </div>
     </div>
   );

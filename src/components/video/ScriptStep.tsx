@@ -7,15 +7,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ArrowLeft, AlertCircle, Wand2, Loader2, Save, Edit, CheckCircle } from "lucide-react";
+import { ArrowLeft, AlertCircle, Wand2, Loader2, Save, Edit, CheckCircle, Star } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { generateScript } from "@/services/openaiService";
 import { Script } from "@/types/video";
 import { Separator } from "@/components/ui/separator";
 import ReactMarkdown from 'react-markdown';
+import { analyzeScript, initializeScriptCritic, ScriptFeedback } from "@/services/scriptCriticService";
 
 const ScriptStep: React.FC = () => {
-  const { project, setProject, setCurrentStep, updateProgress } = useVideoCreation();
+  const { project, setProject, setCurrentStep, updateProgress, openaiApiKey } = useVideoCreation();
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [activeTab, setActiveTab] = useState<string>("auto");
@@ -35,9 +36,14 @@ const ScriptStep: React.FC = () => {
     conclusion: project.script?.conclusion || "",
   });
 
+  // New state for script critic
+  const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
+  const [feedback, setFeedback] = useState<ScriptFeedback | null>(null);
+
   const handleGenerateScript = async () => {
     setIsGenerating(true);
     setError("");
+    setFeedback(null);
     
     try {
       const generatedScript = await generateScript(project.topic, length, tone);
@@ -60,6 +66,9 @@ const ScriptStep: React.FC = () => {
       
       // Mark this step as completed
       updateProgress("script", true);
+      
+      // Switch to preview tab
+      setActiveTab("preview");
     } catch (error) {
       console.error("Error generating script:", error);
       setError(`Failed to generate script: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -86,6 +95,7 @@ const ScriptStep: React.FC = () => {
     
     setEditMode(false);
     updateProgress("script", true);
+    setFeedback(null);
   };
 
   const handleContinue = () => {
@@ -94,6 +104,53 @@ const ScriptStep: React.FC = () => {
 
   const handleGoBack = () => {
     setCurrentStep("topic");
+  };
+  
+  // Script critic function
+  const handleAnalyzeScript = async () => {
+    if (!script) return;
+    
+    setIsAnalyzing(true);
+    setError("");
+    
+    try {
+      initializeScriptCritic(openaiApiKey);
+      const scriptFeedback = await analyzeScript(script, project.topic);
+      setFeedback(scriptFeedback);
+      
+      // If feedback includes an improved script, offer to apply it
+      if (scriptFeedback.improvedScript) {
+        setEditedScript({
+          title: scriptFeedback.improvedScript.title,
+          introduction: scriptFeedback.improvedScript.introduction,
+          body: scriptFeedback.improvedScript.body,
+          conclusion: scriptFeedback.improvedScript.conclusion
+        });
+      }
+    } catch (error) {
+      console.error("Error analyzing script:", error);
+      setError(`Failed to analyze script: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+  
+  // Apply improved script from critic
+  const handleApplyImprovedScript = () => {
+    if (!feedback?.improvedScript) return;
+    
+    const updatedScript: Script = {
+      ...feedback.improvedScript
+    };
+    
+    setScript(updatedScript);
+    setProject((prev) => ({
+      ...prev,
+      script: updatedScript,
+      updatedAt: new Date()
+    }));
+    
+    setFeedback(null);
   };
 
   return (
@@ -118,6 +175,7 @@ const ScriptStep: React.FC = () => {
               <TabsTrigger value="auto">Auto-Generate</TabsTrigger>
               <TabsTrigger value="manual">Write Manually</TabsTrigger>
               {script && <TabsTrigger value="preview">Preview</TabsTrigger>}
+              {script && <TabsTrigger value="critic">Script Critic</TabsTrigger>}
             </TabsList>
             
             <TabsContent value="auto" className="space-y-6">
@@ -312,6 +370,63 @@ const ScriptStep: React.FC = () => {
                     </div>
                   </div>
                 </div>
+              </TabsContent>
+            )}
+            
+            {script && (
+              <TabsContent value="critic" className="space-y-6">
+                <div className="mb-6">
+                  <Button
+                    onClick={handleAnalyzeScript}
+                    disabled={isAnalyzing || !script}
+                    className="w-full"
+                  >
+                    {isAnalyzing ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Analyzing Script...
+                      </>
+                    ) : (
+                      <>
+                        <Star className="mr-2 h-4 w-4" />
+                        Analyze & Improve Script
+                      </>
+                    )}
+                  </Button>
+                </div>
+                
+                {feedback && (
+                  <div className="space-y-4">
+                    <Alert className={feedback.hasSuggestions ? "bg-amber-50 border-amber-200" : "bg-green-50 border-green-200"}>
+                      <Star className={`h-4 w-4 ${feedback.hasSuggestions ? "text-amber-500" : "text-green-500"}`} />
+                      <AlertDescription className={feedback.hasSuggestions ? "text-amber-700" : "text-green-700"}>
+                        {feedback.hasSuggestions ? "Our AI critic has some suggestions for your script." : "Great job! Your script looks good with minimal suggestions."}
+                      </AlertDescription>
+                    </Alert>
+                    
+                    <div className="border rounded-md p-4">
+                      <h3 className="text-lg font-medium mb-2">Feedback & Suggestions</h3>
+                      {feedback.suggestions.length > 0 ? (
+                        <ul className="list-disc pl-5 space-y-2">
+                          {feedback.suggestions.map((suggestion, index) => (
+                            <li key={index}>{suggestion}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>No significant issues found in your script.</p>
+                      )}
+                    </div>
+                    
+                    {feedback.improvedScript && (
+                      <div className="mt-4">
+                        <h3 className="text-lg font-medium mb-2">Improved Script Available</h3>
+                        <Button onClick={handleApplyImprovedScript} className="w-full">
+                          Apply Improved Script
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                )}
               </TabsContent>
             )}
           </Tabs>
