@@ -45,7 +45,8 @@ const Index = () => {
     }
   };
 
-  if (currentStep !== null && currentStep !== undefined && currentStep.length > 0) {
+  // Modify the condition to check currentStep more precisely
+  if (currentStep) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
         <Header />
