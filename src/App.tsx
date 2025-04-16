@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import ReferralSystem from "./pages/ReferralSystem";
 import NotFound from "./pages/NotFound";
 
+// Create a new query client
 const queryClient = new QueryClient();
 
 const App = () => (

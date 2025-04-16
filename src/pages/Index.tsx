@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useVideoCreation } from "@/context/VideoCreationContext";
 import VideoCreationHeader from "@/components/video/VideoCreationHeader";
 import TopicStep from "@/components/video/TopicStep";
@@ -24,10 +23,28 @@ const Index = () => {
   const [showingTrending, setShowingTrending] = useState(false);
   const [slotsRemaining, setSlotsRemaining] = useState(11); // FOMO trigger
   const [showReferralBanner, setShowReferralBanner] = useState(true);
+  const [activeUsers, setActiveUsers] = useState(327);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const change = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+      setActiveUsers(prev => Math.max(300, Math.min(450, prev + change)));
+      
+      if (Math.random() > 0.9) {
+        setSlotsRemaining(prev => Math.max(2, prev - 1));
+      }
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   const handleStartNewProject = () => {
     resetProject();
     setCurrentStep("topic");
+  };
+
+  const handleReferralClick = () => {
+    navigate("/referrals");
   };
 
   const renderCurrentStep = () => {
@@ -49,7 +66,6 @@ const Index = () => {
     }
   };
 
-  // Check if we're in the video creation flow
   const isInVideoCreationFlow = currentStep !== null;
   
   if (isInVideoCreationFlow) {
@@ -70,7 +86,6 @@ const Index = () => {
     );
   }
 
-  // Home page view
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
@@ -88,7 +103,7 @@ const Index = () => {
                 </div>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="gap-1">
+                <Button variant="outline" size="sm" className="gap-1" onClick={handleReferralClick}>
                   <Share2 className="h-4 w-4" /> Share
                 </Button>
                 <Button variant="ghost" size="sm" onClick={() => setShowReferralBanner(false)}>
@@ -125,9 +140,15 @@ const Index = () => {
               </Button>
             </div>
             
-            <div className="text-sm text-muted-foreground mb-8">
-              <Hourglass className="h-4 w-4 inline-block mr-1 text-amber-500" /> 
-              Only <span className="text-amber-500 font-semibold">{slotsRemaining} slots</span> remaining today for new users
+            <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8 text-sm text-muted-foreground mb-8">
+              <div className="flex items-center">
+                <Hourglass className="h-4 w-4 inline-block mr-1 text-amber-500" /> 
+                Only <span className="text-amber-500 font-semibold">{slotsRemaining} slots</span> remaining today
+              </div>
+              <div className="flex items-center">
+                <div className="h-2 w-2 rounded-full bg-green-500 mr-1 animate-pulse"></div>
+                <span className="text-green-600 font-semibold">{activeUsers}</span> users online now
+              </div>
             </div>
             
             <GrowthMetrics />
@@ -145,7 +166,7 @@ const Index = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <div className="bg-muted/40 rounded-lg p-6 border border-border">
                 <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                  <Sparkles className="h-6 w-6 text-primary" />
+                  Sparkles className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">AI-Powered Scripts</h3>
                 <p className="text-muted-foreground">
@@ -156,7 +177,7 @@ const Index = () => {
               
               <div className="bg-muted/40 rounded-lg p-6 border border-border">
                 <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                  <Clock className="h-6 w-6 text-primary" />
+                  Clock className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">Save Hours of Work</h3>
                 <p className="text-muted-foreground">
@@ -167,7 +188,7 @@ const Index = () => {
               
               <div className="bg-muted/40 rounded-lg p-6 border border-border">
                 <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                  <Users className="h-6 w-6 text-primary" />
+                  Users className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">Built for Teams</h3>
                 <p className="text-muted-foreground">
@@ -258,7 +279,6 @@ const Index = () => {
   );
 };
 
-// Video Creation Psychological Triggers component
 const VideoCreationPsychTriggers = () => {
   return (
     <div className="mb-16 bg-gradient-to-br from-muted/20 to-muted/40 p-6 rounded-xl border border-border">
@@ -320,7 +340,6 @@ const VideoCreationPsychTriggers = () => {
   );
 };
 
-// Video Conversion Optimization Component
 const VideoConversionBanner = () => {
   return (
     <div className="mb-16 bg-gradient-to-r from-primary/10 to-indigo-400/10 rounded-lg border border-primary/20 p-6">
@@ -351,7 +370,6 @@ const VideoConversionBanner = () => {
   );
 };
 
-// Retention Features Component
 const RetentionFeatures = () => {
   return (
     <div className="mb-12">

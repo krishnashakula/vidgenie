@@ -17,8 +17,8 @@ const Header = () => {
     <header className="border-b bg-background py-4">
       <div className="container flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Link to="/" className="text-xl font-bold hover:opacity-80 transition-opacity">
-            AI Video Creator
+          <Link to="/" className="text-xl font-bold hover:opacity-80 transition-opacity flex items-center gap-2">
+            <span className="text-primary">AI</span> Video Creator
           </Link>
         </div>
         
@@ -58,6 +58,12 @@ const Header = () => {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <Link to="/">
+                  <DropdownMenuItem>
+                    <Plus className="h-4 w-4 mr-2" />
+                    New Project
+                  </DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem onClick={() => setProjectSelectorOpen(true)}>
                   <FolderOpen className="h-4 w-4 mr-2" />
                   My Projects
