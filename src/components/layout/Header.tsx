@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import { useVideoCreation } from "@/context/VideoCreationContext";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { LogIn, User, FolderOpen, LogOut, Plus } from "lucide-react";
+import { LogIn, User, FolderOpen, LogOut, Plus, UserPlus, Gift } from "lucide-react";
 import AuthModal from "@/components/auth/AuthModal";
 import ProjectSelector from "@/components/project/ProjectSelector";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const { user, logout, project } = useVideoCreation();
@@ -16,10 +17,22 @@ const Header = () => {
     <header className="border-b bg-background py-4">
       <div className="container flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h1 className="text-xl font-bold">AI Video Creator</h1>
+          <Link to="/" className="text-xl font-bold hover:opacity-80 transition-opacity">
+            AI Video Creator
+          </Link>
         </div>
         
         <div className="flex items-center gap-4">
+          <Link to="/referrals">
+            <Button 
+              variant="ghost" 
+              className="gap-2 hidden md:flex"
+            >
+              <UserPlus className="h-4 w-4 text-primary" />
+              Refer & Earn
+            </Button>
+          </Link>
+          
           <Button 
             variant="outline" 
             onClick={() => setProjectSelectorOpen(true)}
@@ -49,6 +62,12 @@ const Header = () => {
                   <FolderOpen className="h-4 w-4 mr-2" />
                   My Projects
                 </DropdownMenuItem>
+                <Link to="/referrals">
+                  <DropdownMenuItem>
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Referral Program
+                  </DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem onClick={logout}>
                   <LogOut className="h-4 w-4 mr-2" />
                   Log Out
