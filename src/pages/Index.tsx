@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useVideoCreation } from "@/context/VideoCreationContext";
 import VideoCreationHeader from "@/components/video/VideoCreationHeader";
@@ -44,7 +45,7 @@ const Index = () => {
     }
   };
 
-  if (currentStep !== '') {
+  if (currentStep !== null && currentStep !== undefined && currentStep.length > 0) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
         <Header />

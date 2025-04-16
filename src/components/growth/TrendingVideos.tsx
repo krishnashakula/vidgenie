@@ -3,7 +3,7 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Play, Trending, Share2, Eye } from "lucide-react";
+import { Play, TrendingUp, Share2, Eye } from "lucide-react";
 import { useVideoCreation } from "@/context/VideoCreationContext";
 
 // Sample trending videos data (in a real implementation, this would come from your backend)
@@ -71,7 +71,7 @@ const TrendingVideos: React.FC = () => {
     <div className="mb-16">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-2">
-          <Trending className="h-6 w-6 text-primary" />
+          <TrendingUp className="h-6 w-6 text-primary" />
           <h2 className="text-3xl font-bold">Trending Videos</h2>
         </div>
         <Badge variant="outline" className="px-3 py-1">
