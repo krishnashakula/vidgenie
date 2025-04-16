@@ -45,8 +45,8 @@ const Index = () => {
     }
   };
 
-  // Modify the condition to check currentStep more precisely
-  if (currentStep) {
+  // Check if we're in the video creation flow
+  if (currentStep && currentStep !== "") {
     return (
       <div className="min-h-screen bg-background flex flex-col">
         <Header />
@@ -64,6 +64,7 @@ const Index = () => {
     );
   }
 
+  // Home page view
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
