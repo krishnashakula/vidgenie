@@ -15,6 +15,7 @@ import GrowthMetrics from "@/components/growth/GrowthMetrics";
 import TrendingVideos from "@/components/growth/TrendingVideos";
 import LimitedTimeOffer from "@/components/growth/LimitedTimeOffer";
 import { useNavigate } from "react-router-dom";
+import { CreationStep } from "@/types/video";
 
 const Index = () => {
   const { currentStep, setCurrentStep, progress, projects, user, resetProject } = useVideoCreation();
@@ -46,7 +47,9 @@ const Index = () => {
   };
 
   // Check if we're in the video creation flow
-  if (currentStep && currentStep !== "") {
+  const isInVideoCreationFlow = currentStep && currentStep !== null;
+  
+  if (isInVideoCreationFlow) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
         <Header />
