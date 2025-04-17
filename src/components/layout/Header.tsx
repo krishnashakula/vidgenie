@@ -7,7 +7,7 @@ import { LogIn, User, FolderOpen, LogOut, Plus, UserPlus, Gift, Home, Info, Sett
 import AuthModal from "@/components/auth/AuthModal";
 import ProjectSelector from "@/components/project/ProjectSelector";
 import { Link } from "react-router-dom";
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 
 const Header = () => {
   const { user, logout, project } = useVideoCreation();
@@ -25,12 +25,13 @@ const Header = () => {
           <NavigationMenu className="hidden md:flex">
             <NavigationMenuList>
               <NavigationMenuItem>
-                <Link to="/">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                {/* Fix: Don't nest Link inside NavigationMenuLink */}
+                <div className={navigationMenuTriggerStyle()}>
+                  <Link to="/" className="flex items-center">
                     <Home className="h-4 w-4 mr-2" />
                     Home
-                  </NavigationMenuLink>
-                </Link>
+                  </Link>
+                </div>
               </NavigationMenuItem>
               
               <NavigationMenuItem>
@@ -60,12 +61,13 @@ const Header = () => {
               </NavigationMenuItem>
               
               <NavigationMenuItem>
-                <Link to="/blog">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                {/* Fix: Don't nest Link inside NavigationMenuLink */}
+                <div className={navigationMenuTriggerStyle()}>
+                  <Link to="/blog" className="flex items-center">
                     <BookOpen className="h-4 w-4 mr-2" />
                     Blog
-                  </NavigationMenuLink>
-                </Link>
+                  </Link>
+                </div>
               </NavigationMenuItem>
               
               <NavigationMenuItem>
