@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useVideoCreation } from "@/context/VideoCreationContext";
 import VideoCreationHeader from "@/components/video/VideoCreationHeader";
@@ -248,7 +247,7 @@ const Index = () => {
           </div>
           
           {showingTrending && <TrendingVideos />}
-
+          
           <VideoConversionBanner />
           
           <div className="text-center py-10 px-6 bg-primary/10 rounded-xl border border-primary/20 mb-12">
