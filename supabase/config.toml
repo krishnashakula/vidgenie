@@ -1,1 +1,5 @@
+
 project_id = "smttlncfrydbwkyzzicw"
+
+[functions.increment_counts]
+verify_jwt = true

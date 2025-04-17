@@ -9,13 +9,308 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      audio: {
+        Row: {
+          created_at: string | null
+          duration: number
+          id: string
+          model: string
+          project_id: string
+          src: string
+          voice: string
+        }
+        Insert: {
+          created_at?: string | null
+          duration: number
+          id?: string
+          model: string
+          project_id: string
+          src: string
+          voice: string
+        }
+        Update: {
+          created_at?: string | null
+          duration?: number
+          id?: string
+          model?: string
+          project_id?: string
+          src?: string
+          voice?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audio_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "video_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      completed_videos: {
+        Row: {
+          created_at: string | null
+          duration: number
+          id: string
+          project_id: string
+          share_count: number | null
+          url: string
+          view_count: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          duration: number
+          id?: string
+          project_id: string
+          share_count?: number | null
+          url: string
+          view_count?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          duration?: number
+          id?: string
+          project_id?: string
+          share_count?: number | null
+          url?: string
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "completed_videos_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: true
+            referencedRelation: "video_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          credits: number | null
+          full_name: string | null
+          id: string
+          referral_code: string
+          referred_by: string | null
+          updated_at: string | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          credits?: number | null
+          full_name?: string | null
+          id: string
+          referral_code: string
+          referred_by?: string | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          credits?: number | null
+          full_name?: string | null
+          id?: string
+          referral_code?: string
+          referred_by?: string | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          bonus_credits: number | null
+          created_at: string | null
+          id: string
+          referred_id: string
+          referrer_id: string
+        }
+        Insert: {
+          bonus_credits?: number | null
+          created_at?: string | null
+          id?: string
+          referred_id: string
+          referrer_id: string
+        }
+        Update: {
+          bonus_credits?: number | null
+          created_at?: string | null
+          id?: string
+          referred_id?: string
+          referrer_id?: string
+        }
+        Relationships: []
+      }
+      scripts: {
+        Row: {
+          body: string
+          conclusion: string
+          created_at: string | null
+          full_text: string | null
+          id: string
+          introduction: string
+          project_id: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          body: string
+          conclusion: string
+          created_at?: string | null
+          full_text?: string | null
+          id?: string
+          introduction: string
+          project_id: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          body?: string
+          conclusion?: string
+          created_at?: string | null
+          full_text?: string | null
+          id?: string
+          introduction?: string
+          project_id?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scripts_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "video_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trending_videos: {
+        Row: {
+          created_at: string | null
+          featured: boolean | null
+          id: string
+          rank: number
+          updated_at: string | null
+          video_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          featured?: boolean | null
+          id?: string
+          rank: number
+          updated_at?: string | null
+          video_id: string
+        }
+        Update: {
+          created_at?: string | null
+          featured?: boolean | null
+          id?: string
+          rank?: number
+          updated_at?: string | null
+          video_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trending_videos_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "completed_videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      video_projects: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          status: string | null
+          thumbnail_url: string | null
+          topic: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          status?: string | null
+          thumbnail_url?: string | null
+          topic: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          status?: string | null
+          thumbnail_url?: string | null
+          topic?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      visuals: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          duration: number
+          id: string
+          project_id: string
+          src: string
+          start_time: number
+          type: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          duration: number
+          id?: string
+          project_id: string
+          src: string
+          start_time: number
+          type: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          duration?: number
+          id?: string
+          project_id?: string
+          src?: string
+          start_time?: number
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "visuals_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "video_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_credits: {
+        Args: { user_uuid: string }
+        Returns: number
+      }
+      process_referral: {
+        Args: { referral_code: string; referred_user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
