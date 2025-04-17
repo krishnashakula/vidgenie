@@ -1,10 +1,12 @@
 
 export interface Script {
+  id?: string;
   title: string;
   introduction: string;
   body: string;
   conclusion: string;
   fullText: string;
+  sentences?: string[];
 }
 
 export interface AudioSettings {
@@ -13,6 +15,12 @@ export interface AudioSettings {
   speed: number;
   stability: number;
   clarity: number;
+}
+
+export interface Audio {
+  id?: string;
+  src: string;
+  duration: number;
 }
 
 export interface Visual {

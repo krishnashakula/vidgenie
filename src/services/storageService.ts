@@ -91,5 +91,19 @@ export const storageService = {
     } catch (e) {
       console.error('Error clearing data:', e);
     }
+  },
+
+  /**
+   * Get the user's referral code
+   * @returns The referral code or a generated one if not found
+   */
+  getReferralCode(): string {
+    const code = this.getItem('referralCode');
+    if (code) return code;
+    
+    // Generate a random referral code if none exists
+    const randomCode = Math.random().toString(36).substring(2, 10).toUpperCase();
+    this.setItem('referralCode', randomCode);
+    return randomCode;
   }
 };

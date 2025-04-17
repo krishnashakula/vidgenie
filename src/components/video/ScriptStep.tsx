@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useVideoCreation } from "@/context/VideoCreationContext";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +13,7 @@ import { Script } from "@/types/video";
 import { Separator } from "@/components/ui/separator";
 import ReactMarkdown from 'react-markdown';
 import { analyzeScript, initializeScriptCritic, ScriptFeedback } from "@/services/scriptCriticService";
+import { v4 as uuidv4 } from "uuid";
 
 const ScriptStep: React.FC = () => {
   const { project, setProject, setCurrentStep, updateProgress, openaiApiKey } = useVideoCreation();
@@ -22,7 +22,7 @@ const ScriptStep: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("auto");
   const [tone, setTone] = useState<"casual" | "professional" | "enthusiastic">("professional");
   const [length, setLength] = useState<"short" | "medium" | "long">("medium");
-  const [script, setScript] = useState<Script | undefined>(project.script);
+  const [script, setScript] = useState<Script | null>(project.script);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editedScript, setEditedScript] = useState<{
     title: string;
@@ -36,7 +36,6 @@ const ScriptStep: React.FC = () => {
     conclusion: project.script?.conclusion || "",
   });
 
-  // New state for script critic
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
   const [feedback, setFeedback] = useState<ScriptFeedback | null>(null);
 
@@ -49,14 +48,15 @@ const ScriptStep: React.FC = () => {
       const generatedScript = await generateScript(project.topic, length, tone);
       setScript(generatedScript);
       
-      // Update project with generated script
       setProject((prev) => ({
         ...prev,
-        script: generatedScript,
+        script: {
+          ...generatedScript,
+          id: uuidv4()
+        },
         updatedAt: new Date()
       }));
       
-      // Also update the editable script version
       setEditedScript({
         title: generatedScript.title,
         introduction: generatedScript.introduction,
@@ -64,10 +64,8 @@ const ScriptStep: React.FC = () => {
         conclusion: generatedScript.conclusion
       });
       
-      // Mark this step as completed
       updateProgress("script", true);
       
-      // Switch to preview tab
       setActiveTab("preview");
     } catch (error) {
       console.error("Error generating script:", error);
@@ -79,6 +77,7 @@ const ScriptStep: React.FC = () => {
 
   const handleSaveEdits = () => {
     const updatedScript: Script = {
+      id: project.script?.id || uuidv4(),
       title: editedScript.title,
       introduction: editedScript.introduction,
       body: editedScript.body,
@@ -106,7 +105,6 @@ const ScriptStep: React.FC = () => {
     setCurrentStep("topic");
   };
   
-  // Script critic function
   const handleAnalyzeScript = async () => {
     if (!script) return;
     
@@ -118,7 +116,6 @@ const ScriptStep: React.FC = () => {
       const scriptFeedback = await analyzeScript(script, project.topic);
       setFeedback(scriptFeedback);
       
-      // If feedback includes an improved script, offer to apply it
       if (scriptFeedback.improvedScript) {
         setEditedScript({
           title: scriptFeedback.improvedScript.title,
@@ -135,11 +132,11 @@ const ScriptStep: React.FC = () => {
     }
   };
   
-  // Apply improved script from critic
   const handleApplyImprovedScript = () => {
     if (!feedback?.improvedScript) return;
     
     const updatedScript: Script = {
+      id: project.script?.id || uuidv4(),
       ...feedback.improvedScript
     };
     

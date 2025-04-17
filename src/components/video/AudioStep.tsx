@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { useVideoCreation } from "@/context/VideoCreationContext";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +10,7 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ElevenLabsService, DEFAULT_VOICES, MODELS } from "@/services/elevenLabsService";
 import { AudioSettings } from "@/types/video";
+import { v4 as uuidv4 } from "uuid";
 
 const AudioStep: React.FC = () => {
   const { project, setProject, setCurrentStep, audioSettings, setAudioSettings, updateProgress, elevenLabsApiKey, setElevenLabsApiKey } = useVideoCreation();
@@ -66,6 +66,7 @@ const AudioStep: React.FC = () => {
         setProject((prev) => ({
           ...prev,
           audio: {
+            id: uuidv4(),
             src: url,
             duration: audio.duration
           },

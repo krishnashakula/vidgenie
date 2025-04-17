@@ -3,10 +3,9 @@ import React, { createContext, useState, useContext, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { storageService } from '@/services/storageService';
 import { authService } from '@/services/authService';
+import { Script, Audio, Visual, CreationStep, AudioSettings } from '@/types/video';
 
 // Define types
-export type CreationStep = 'topic' | 'script' | 'audio' | 'visuals' | 'assembly' | 'rendering';
-
 export interface Project {
   id: string;
   topic: string;
@@ -18,38 +17,11 @@ export interface Project {
   updatedAt: Date;
 }
 
-export interface Script {
-  id: string;
-  fullText: string;
-  sentences: string[];
-}
-
-export interface Audio {
-  id: string;
-  src: string;
-  duration: number;
-}
-
-export interface Visual {
-  id: string;
-  url: string;
-  description: string;
-}
-
 export interface User {
   id: string;
   name: string;
   email: string;
   avatarUrl: string;
-}
-
-// Audio settings for ElevenLabs API
-export interface AudioSettings {
-  voice: string;
-  model: string;
-  stability: number;
-  clarity: number;
-  speed: number;
 }
 
 interface VideoCreationContextType {
@@ -214,7 +186,7 @@ export const VideoCreationProvider: React.FC<{ children: React.ReactNode }> = ({
   const logout = useCallback(() => {
     setUser(null);
     storageService.removeItem('user');
-    authService.logout(); // Clear session from backend
+    authService.logout();
   }, []);
   
   // Function to reset project
@@ -249,8 +221,8 @@ export const VideoCreationProvider: React.FC<{ children: React.ReactNode }> = ({
         script: !!projectToLoad.script,
         audio: !!projectToLoad.audio,
         visuals: projectToLoad.visuals.length > 0,
-        assembly: false, // Assembly is a process step
-        rendering: false // Rendering is a process step
+        assembly: false,
+        rendering: false
       };
       
       setProgress(newProgress);
