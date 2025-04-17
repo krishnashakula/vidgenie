@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useVideoCreation } from "@/context/VideoCreationContext";
 import VideoCreationHeader from "@/components/video/VideoCreationHeader";
@@ -166,7 +167,7 @@ const Index = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <div className="bg-muted/40 rounded-lg p-6 border border-border">
                 <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                  Sparkles className="h-6 w-6 text-primary" />
+                  <Sparkles className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">AI-Powered Scripts</h3>
                 <p className="text-muted-foreground">
@@ -177,7 +178,7 @@ const Index = () => {
               
               <div className="bg-muted/40 rounded-lg p-6 border border-border">
                 <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                  Clock className="h-6 w-6 text-primary" />
+                  <Clock className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">Save Hours of Work</h3>
                 <p className="text-muted-foreground">
@@ -188,7 +189,7 @@ const Index = () => {
               
               <div className="bg-muted/40 rounded-lg p-6 border border-border">
                 <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                  Users className="h-6 w-6 text-primary" />
+                  <Users className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">Built for Teams</h3>
                 <p className="text-muted-foreground">
